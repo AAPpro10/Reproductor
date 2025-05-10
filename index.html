@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Mi Reproductor DAZN</title>
+  <style>
+    /* Reset básico */
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      font-family: Arial, sans-serif;
+      background: #121212;
+      color: #eee;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 20px;
+      min-height: 100vh;
+    }
+    h1 { margin-bottom: 20px; }
+    .controls {
+      margin-bottom: 10px;
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+      align-items: center;
+    }
+    .controls select,
+    .controls button {
+      padding: 8px 12px;
+      font-size: 1rem;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+      background: #1e88e5;
+      color: #fff;
+      transition: background 0.2s;
+    }
+    .controls select:hover,
+    .controls button:hover {
+      background: #1565c0;
+    }
+    .player-container {
+      position: relative;
+      width: 100%;
+      max-width: 900px;
+      padding-top: 56.25%; /* 16:9 */
+      background: #000;
+      border-radius: 8px;
+      overflow: hidden;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.5);
+    }
+    .player-container iframe {
+      position: absolute;
+      top: 0; left: 0;
+      width: 100%;
+      height: 100%;
+      border: none;
+    }
+  </style>
+</head>
+<body>
+
+  <h1>Mi Reproductor DAZN</h1>
+
+  <div class="controls">
+    <label for="channelSelect">Canal:</label>
+    <select id="channelSelect">
+      <option value="DAZN_1_ES">DAZN 1</option>
+      <option value="DAZN_2_ES">DAZN 2</option>
+      <option value="DAZN_F1">DAZN 3</option>
+      <option value="DAZN_4_ES">DAZN 4</option>
+    </select>
+    <button id="loadBtn">Cargar</button>
+    <button id="fullscreenBtn">Pantalla completa</button>
+    <button id="reloadBtn">Recargar</button>
+  </div>
+
+  <div class="player-container" id="playerContainer">
+    <iframe
+      id="player"
+      allowfullscreen="true"
+      scrolling="no"
+      src="https://dtvlivegratis.com/cn.php?id=DAZN_1_ES"
+      allow="encrypted-media">
+    </iframe>
+  </div>
+
+  <script>
+    const select = document.getElementById('channelSelect');
+    const loadBtn = document.getElementById('loadBtn');
+    const fullscreenBtn = document.getElementById('fullscreenBtn');
+    const reloadBtn = document.getElementById('reloadBtn');
+    const player = document.getElementById('player');
+    const container = document.getElementById('playerContainer');
+
+    // Cargar canal seleccionado
+    loadBtn.addEventListener('click', () => {
+      const canal = select.value;
+      player.src = `https://dtvlivegratis.com/cn.php?id=${canal}`;
+    });
+
+    // Pantalla completa
+    fullscreenBtn.addEventListener('click', () => {
+      if (container.requestFullscreen) container.requestFullscreen();
+      else if (container.webkitRequestFullscreen) container.webkitRequestFullscreen();
+      else if (container.msRequestFullscreen) container.msRequestFullscreen();
+    });
+
+    // Recargar iframe
+    reloadBtn.addEventListener('click', () => {
+      player.src = player.src;
+    });
+
+    // Tecla F para fullscreen
+    document.addEventListener('keydown', e => {
+      if (e.key.toLowerCase() === 'f') fullscreenBtn.click();
+    });
+  </script>
+
+</body>
+</html>
